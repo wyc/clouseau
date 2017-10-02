@@ -40,7 +40,9 @@ class IndexCleanupService(ctx: ServiceContext[ConfigurationArgs]) extends Servic
       // for example, from foo.1234567890 to foo.20170912.092828.deleted.1234567890
       val destPath = dbName.dropRight(10) + sdfNow + ".deleted." + dbName.takeRight(10)
       val destDir = new File(rootDir, destPath)
-      logger.info("Renaming '%s' to '%s'".format(srcDir.getAbsolutePath, destDir.getAbsolutePath))
+      logger.info("Renaming '%s' to '%s'".format(
+        srcDir.getAbsolutePath, destDir.getAbsolutePath)
+      )
       rename(srcDir, destDir)
     case CleanupDbMsg(dbName: String, activeSigs: List[String]) =>
       logger.info("Cleaning up " + dbName)
@@ -77,7 +79,7 @@ class IndexCleanupService(ctx: ServiceContext[ConfigurationArgs]) extends Servic
   }
 
   private def rename(srcDir: File, destDir: File) {
-    if (!srcDir.exists) {
+    if (!srcDir.isDirectory) {
       return
     }
     if (!srcDir.renameTo(destDir)) {
